@@ -263,7 +263,7 @@ function PersonalVerification(props){
       </div>
     </div>
 
-      <h1 style={{ paddingLeft:"25px", paddingTop:"70px", color: props.color }}>Requested Verifications</h1>
+      <h1 style={{ paddingLeft:"25px", paddingTop:"70px", color: props.color }}>Requested Applications</h1>
       {unVerifiedPass.length<1 && <h5 style={{paddingLeft: "25px"}}>No Requests</h5>}
         {unVerifiedPass.length>=1 &&
         <div className="table-responsive" style={{padding:"25px"}}>

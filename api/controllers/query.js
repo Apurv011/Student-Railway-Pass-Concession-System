@@ -90,6 +90,22 @@ exports.AddNewQuery = (req, res, next) => {
     });
 };
 
+exports.deleteQuery = (req, res, next) => {
+    const queryId = req.params.queryId;
+    Query
+        .remove({ _id: queryId })
+        .exec()
+        .then(result => {
+            res.status(200).json({
+                message: 'Query Deleted Successfully!'
+            });
+        })
+        .catch(error => {
+            error.message = 'Could Not Delete Query!';
+            next(error);
+        });
+};
+
 exports.updateQuery = (req, res, next) => {
     const queryId = req.params.queryId;
 

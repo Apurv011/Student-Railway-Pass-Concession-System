@@ -42,7 +42,7 @@ function Header(props){
   return (
     <div>
       <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
-        <button className="btn btn-link navbar-brand" onClick={searchPage}>Reservation System</button>
+        <button className="btn btn-link navbar-brand" onClick={searchPage}>Indian Railway Information</button>
         <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
           <span className="navbar-toggler-icon"></span>
         </button>

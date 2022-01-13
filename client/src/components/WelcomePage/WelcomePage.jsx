@@ -57,7 +57,7 @@ const WelcomePage = React.forwardRef((props, ref) => {
         className="text-light text-center"
         style={{fontSize: "75px"}}
       >
-        Reservation System
+        Student Railway Pass Concession System
       </h1>
       <div className="text-center">
         <button type="button" onClick={guest} className="btn">

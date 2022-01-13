@@ -98,6 +98,29 @@ function UserQuery(props){
     event.preventDefault();
   }
 
+  function deleteQuery(id) {
+    axios.delete(`http://localhost:5000/query/${id}`).then(res => {
+      console.log(res);
+    });
+
+    if(queries.length===1){
+      setIsQuery(false);
+    }
+    setQueries((preValues) => {
+      return queries.filter((query, index) => {
+        return query._id !== id;
+      });
+    });
+    if(allQueries.length===1){
+      setIsAnyQuery(false);
+    }
+    setAllQueries((preValues) => {
+      return allQueries.filter((query, index) => {
+        return query._id !== id;
+      });
+    });
+  }
+
 
   return (
     <div>
@@ -113,15 +136,14 @@ function UserQuery(props){
             queries.reverse().map((query, index) => {
               return (
                 <div className="mt-2">
-                  <div className="d-flex flex-row align-items-center">
-                    <h5 className="mr-2">{query.que}</h5>
-                    <span style={{marginRight: "35px", position: "absolute", right: "0", top: "10"}}>{query.date}</span>
-                  </div>
+                  <h5 className="mr-2">{query.que}</h5>
+                  <span>Date: {query.date}</span>
                   <div>
-                    <span style={!query.isAns ? {color: "red"} : {color: "black"}}>
+                    <h6 style={!query.isAns ? {color: "green"} : {color: "black"}}>
                       {query.isAns ? query.ans : "Yet to be Answered!"}
-                    </span>
+                    </h6>
                   </div>
+                  {!query.isAns && <button onClick={() => deleteQuery(query._id)} className="mt-1 btn btn-outline-danger">Delete Query</button>}
                   <hr />
                 </div>
               );
@@ -147,17 +169,15 @@ function UserQuery(props){
             allQueries.reverse().map((query, index) => {
               return (
                 <div className="mt-2">
-                  <div className="d-flex flex-row align-items-center">
-                    <div className="user-info">
-                      <h5 className="mr-2">{query.que}</h5>
-                      <p className="text-muted">{query.userName},  {query.branch}</p>
-                    </div>
-                    <span style={{marginRight: "35px", position: "absolute", right: "0", top: "10"}}>{query.date}</span>
-                  </div>
+                  <h5 className="mr-2">{query.que}</h5>
+                  <span className="text-muted">Query By: {query.userName},  {query.branch}</span>
                   <div>
-                    <span style={!query.isAns ? {color: "red"} : {color: "black"}}>
-                      {query.isAns ? query.ans : "Yet to be Answered!"}
-                    </span>
+                    <span>Date: {query.date}</span>
+                    <div className="mt-2">
+                      <h6 style={!query.isAns ? {color: "green"} : {color: "black"}}>
+                        {query.isAns ? query.ans : "Yet to be Answered!"}
+                      </h6>
+                    </div>
                   </div>
                   <hr />
                 </div>

@@ -164,17 +164,13 @@ function AdminQuery(props){
             unansQueries.reverse().map((query, index) => {
               return (
                 <div className="mt-2">
-                  <div className="d-flex flex-row align-items-center">
-                  <div className="user-info">
-                    <h5 className="mr-2">{query.que}</h5>
-                    <p className="text-muted">{query.userName},  {query.branch}</p>
-                  </div>
-                    <span style={{marginRight: "35px", position: "absolute", right: "0", top: "10"}}>{query.date}</span>
-                  </div>
+                  <h5 className="mr-2">{query.que}</h5>
+                  <span className="text-muted">Query By: {query.userName},  {query.branch}</span>
                   <div>
-                    <span>
+                    <span>Date: {query.date}</span>
+                    <div className="mt-2">
                       <p onClick={()=>selectQ(query._id, query.que)} className="text-info font-weight-bold" data-toggle="modal" data-target="#exampleModalCenter" style={{cursor:"pointer"}}>Answer Now</p>
-                    </span>
+                    </div>
                   </div>
                   <hr />
                 </div>
@@ -197,17 +193,15 @@ function AdminQuery(props){
             ansQueries.reverse().map((query, index) => {
               return (
                 <div className="mt-2">
-                  <div className="d-flex flex-row align-items-center">
-                    <div className="user-info">
-                      <h5 className="mr-2">{query.que}</h5>
-                      <p className="text-muted">{query.userName},  {query.branch}</p>
-                    </div>
-                    <span style={{marginRight: "35px", position: "absolute", right: "0", top: "10"}}>{query.date}</span>
-                  </div>
+                  <h5 className="mr-2">{query.que}</h5>
+                  <span className="text-muted">Query By: {query.userName},  {query.branch}</span>
                   <div>
-                    <span>
-                      {query.ans}
-                    </span>
+                    <span>Date: {query.date}</span>
+                    <div className="mt-2">
+                      <h6 style={!query.isAns ? {color: "green"} : {color: "black"}}>
+                        {query.ans}
+                      </h6>
+                    </div>
                   </div>
                   <hr />
                 </div>

@@ -237,17 +237,16 @@ function UserHome() {
                 </div>
 
                 <hr />
-                <div className="col text-center">
-                  <span style={{marginRight:"10px"}}>View College ID</span>
-                  <button
-                    onClick={()=>{saveFile(`http://localhost:5000/${userInfo.collegeIDImage}`, `${Date.now()}.${userInfo.collegeIDImage.split('.').at(-1)}`)}}
-                    className="btn btn-sm btn-dark"
-                    >
-                    Download
-                </button>
-                </div>
-
               </form>
+              <div className="col text-center">
+                <span style={{marginRight:"10px"}}>View College ID</span>
+                <button
+                  onClick={()=>{saveFile(`http://localhost:5000/${userInfo.collegeIDImage}`, `${Date.now()}.${userInfo.collegeIDImage.split('.').at(-1)}`)}}
+                  className="btn btn-sm btn-dark"
+                  >
+                  Download
+              </button>
+              </div>
             </h5>
           </div>
           <button type="button"

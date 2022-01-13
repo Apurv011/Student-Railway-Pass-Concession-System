@@ -17,4 +17,6 @@ router.get('/user/:uId', QueryController.getAllUserQueries);
 
 router.patch('/:queryId', QueryController.updateQuery);
 
+router.delete('/:queryId', QueryController.deleteQuery);
+
 module.exports = router;
