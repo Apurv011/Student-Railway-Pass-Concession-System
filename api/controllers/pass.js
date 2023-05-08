@@ -5,7 +5,7 @@ const fs = require('fs');
 exports.getAllPass = (req, res, next) => {
     Pass
         .find()
-        .select('_id dob userId branch name age gender source destination class email collegeID contactNo duration collegeIDImage status')
+        .select('_id dob userId branch name age gender source destination class email collegeID contactNo duration collegeIDImage status issueDate')
         .exec()
         .then(passes => {
             res.status(200).json({
@@ -56,7 +56,7 @@ exports.getOneUserPass = (req, res, next) => {
     const userId = req.params.userId;
     Pass
         .find({userId: userId})
-        .select('_id dob remark branch userId name age gender source destination class email collegeID contactNo duration collegeIDImage status')
+        .select('_id dob remark branch userId name age gender source destination class email collegeID contactNo duration collegeIDImage issueDate status')
         .exec()
         .then(pass => {
             return res.status(201).json(pass);
@@ -68,8 +68,8 @@ exports.getOneUserPass = (req, res, next) => {
 
 exports.getPassPending = (req, res, next) => {
     Pass
-        .find({$or: [{status: "To be verified by college"},{status: "Re-Applied, To be verified by college"}]})
-        .select('_id dob remark branch userId name age gender source destination class email collegeID contactNo duration collegeIDImage status')
+        .find({$or: [{status: "To be verified by college"},{status: "Re-Applied, To be verified by college"}, {status: "Pass experied, Re-Applied"}]})
+        .select('_id dob remark branch userId name age gender source destination class email collegeID contactNo duration collegeIDImage issueDate status')
         .exec()
         .then(pass => {
             return res.status(201).json({
@@ -86,7 +86,7 @@ exports.getPassPending = (req, res, next) => {
 exports.getPassVerified = (req, res, next) => {
     Pass
         .find({status: "Verified by college"})
-        .select('_id dob remark branch userId name age gender source destination class email collegeID contactNo duration collegeIDImage status')
+        .select('_id dob remark branch userId name age gender source destination class email collegeID contactNo duration collegeIDImage issueDate status')
         .exec()
         .then(pass => {
             return res.status(201).json({
@@ -103,7 +103,7 @@ exports.getPassVerifiedBranch = (req, res, next) => {
   const branch = req.params.branch;
     Pass
         .find({$and: [{status: "Verified by college"}, {branch: branch}]})
-        .select('_id dob remark branch userId name age gender source destination class email collegeID contactNo duration collegeIDImage status')
+        .select('_id dob remark branch userId name age gender source destination class email collegeID contactNo duration collegeIDImage issueDate status')
         .exec()
         .then(pass => {
             return res.status(201).json({
@@ -120,7 +120,7 @@ exports.getPassVerifiedSrc = (req, res, next) => {
   const src = req.params.src;
     Pass
         .find({$and: [{status: "Verified by college"}, {source: src}]})
-        .select('_id dob remark branch userId name age gender source destination class email collegeID contactNo duration collegeIDImage status')
+        .select('_id dob remark branch userId name age gender source destination class email collegeID contactNo duration collegeIDImage issueDate status')
         .exec()
         .then(pass => {
             return res.status(201).json({
@@ -137,7 +137,7 @@ exports.getClassPass = (req, res, next) => {
     const cls = req.params.cls;
     Pass
         .find({class: cls})
-        .select('_id dob remark branch userId name age gender source destination class email collegeID contactNo duration collegeIDImage status')
+        .select('_id dob remark branch userId name age gender source destination class email collegeID contactNo duration collegeIDImage issueDate status')
         .exec()
         .then(pass => {
             return res.status(201).json({
@@ -154,7 +154,7 @@ exports.getDurationPass = (req, res, next) => {
     const dur = req.params.dur;
     Pass
         .find({duration: dur})
-        .select('_id dob remark branch userId name age gender source destination class email collegeID contactNo duration collegeIDImage status')
+        .select('_id dob remark branch userId name age gender source destination class email collegeID contactNo duration collegeIDImage issueDate status')
         .exec()
         .then(pass => {
             return res.status(201).json({
@@ -171,7 +171,7 @@ exports.getPassVerifiedDest = (req, res, next) => {
   const dest = req.params.dest;
     Pass
         .find({$and: [{status: "Verified by college"}, {destination: dest}]})
-        .select('_id dob remark branch userId name age gender source destination class email collegeID contactNo duration collegeIDImage status')
+        .select('_id dob remark branch userId name age gender source destination class email collegeID contactNo duration collegeIDImage issueDate status')
         .exec()
         .then(pass => {
             return res.status(201).json({
@@ -188,7 +188,7 @@ exports.getPassVerifiedGender = (req, res, next) => {
   const gen = req.params.gen;
     Pass
         .find({$and: [{status: "Verified by college"}, {gender: gen}]})
-        .select('_id dob remark branch userId name age gender source destination class email collegeID contactNo duration collegeIDImage status')
+        .select('_id dob remark branch userId name age gender source destination class email collegeID contactNo duration collegeIDImage issueDate status')
         .exec()
         .then(pass => {
             return res.status(201).json({
@@ -206,7 +206,7 @@ exports.getPassVerifiedSrcGender = (req, res, next) => {
   const gen = req.params.gen;
     Pass
         .find({$and: [{status: "Verified by college"}, {source: src}, {gender: gen}]})
-        .select('_id dob remark branch userId name age gender source destination class email collegeID contactNo duration collegeIDImage status')
+        .select('_id dob remark branch userId name age gender source destination class email collegeID contactNo duration collegeIDImage issueDate status')
         .exec()
         .then(pass => {
             return res.status(201).json({
@@ -224,7 +224,7 @@ exports.getPassVerifiedSrcBranch = (req, res, next) => {
   const branch = req.params.branch;
     Pass
         .find({$and: [{status: "Verified by college"}, {source: src}, {branch: branch}]})
-        .select('_id dob remark branch userId name age gender source destination class email collegeID contactNo duration collegeIDImage status')
+        .select('_id dob remark branch userId name age gender source destination class email collegeID contactNo duration collegeIDImage issueDate status')
         .exec()
         .then(pass => {
             return res.status(201).json({
@@ -242,7 +242,7 @@ exports.getPassVerifiedGenBranch = (req, res, next) => {
   const branch = req.params.branch;
     Pass
         .find({$and: [{status: "Verified by college"}, {gender: gen}, {branch: branch}]})
-        .select('_id dob remark branch userId name age gender source destination class email collegeID contactNo duration collegeIDImage status')
+        .select('_id dob remark branch userId name age gender source destination class email collegeID contactNo duration collegeIDImage issueDate status')
         .exec()
         .then(pass => {
             return res.status(201).json({
@@ -258,7 +258,7 @@ exports.getPassVerifiedGenBranch = (req, res, next) => {
 exports.getPassRejected = (req, res, next) => {
     Pass
         .find({status: "Rejected by college"})
-        .select('_id dob remark branch userId name age gender source destination class email collegeID contactNo duration collegeIDImage status')
+        .select('_id dob remark branch userId name age gender source destination class email collegeID contactNo duration collegeIDImage issueDate status')
         .exec()
         .then(pass => {
             return res.status(201).json({

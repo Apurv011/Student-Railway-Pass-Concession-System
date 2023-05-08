@@ -91,10 +91,17 @@ function UserPass(props){
     }
   }
 
-  function reApplyForPass(id){
+  function reApplyForPass(id, status){
+   
+      var change;
 
-      var change = {"status": "Re-Applied, To be verified by college", "remark": ""};
-      const foundUser = JSON.parse(loggedInUser);
+      if(status === "Pass expired"){
+        change = {"status": "Pass experied, Re-Applied", "remark": ""};
+      }
+      else {
+        change = {"status": "Re-Applied, To be verified by college", "remark": ""};
+      }
+        const foundUser = JSON.parse(loggedInUser);
       const config = {
         headers: { "Authorization": "Bearer " + foundUser.token }
       };
@@ -129,6 +136,17 @@ function UserPass(props){
       });
     }
   }
+
+  function updatePassAsExpired(id){
+    var change = { status: "Pass expired" };
+    const foundUser = JSON.parse(loggedInUser);
+    const config = {
+      headers: { "Authorization": "Bearer " + foundUser.token }
+    };
+    axios.patch(`http://localhost:5000/pass/${id}`, change).then(response => {
+        console.log(response.data);
+    });  
+ }
 
   function update() {
     const loggedInUser = localStorage.getItem("userData");
@@ -217,6 +235,22 @@ function UserPass(props){
       isVerified==="true" ?
       isPass ?
       passes.reverse().map((pass, index) => {
+
+        var expiryDate = new Date(pass.issueDate);
+        console.log("QQQQQQQQQQQQQQQQQQQQQQQQQ");
+        console.log(pass.issueDate);
+        
+        if(pass.duration === "3 Months") expiryDate.setDate(expiryDate.getDate() + 90);
+        else if(pass.duration === "1 Month") expiryDate.setDate(expiryDate.getDate() + 30);
+        var today = new Date();
+        if(today > expiryDate && pass.status !== "Re-Applied, To be verified by college"  && pass.status !== "Pass experied, Re-Applied"){
+          updatePassAsExpired(pass._id);
+        }  
+        var dd = String(expiryDate.getDate()).padStart(2, '0');
+        var mm = String(expiryDate.getMonth() + 1).padStart(2, '0'); 
+        var yyyy = expiryDate.getFullYear();
+        expiryDate = dd + "-" + mm + "-" + yyyy;
+        
         return(
           <div className="table-responsive" style={{padding:"25px"}}>
       <table className="table table-hover table-dark">
@@ -232,11 +266,12 @@ function UserPass(props){
               <th style={{color:"#ffffff"}}>Destination</th>
               <th style={{color:"#ffffff"}}>Class</th>
               <th style={{color:"#ffffff"}}>Duration</th>
+              <th style={{color:"#ffffff"}}>Expiry Date</th>
               <th style={{color:"#ffffff"}}>Status</th>
               {pass.status==="Rejected by college" &&
               <th style={{color:"#ffffff"}}>Remark</th>
               }
-              {pass.status==="Rejected by college" &&
+              {(pass.status==="Rejected by college" || pass.status==="Pass expired") &&
               <th style={{color:"#ffffff"}}>Re-Apply</th>
               }
           </tr>
@@ -274,6 +309,9 @@ function UserPass(props){
           <td rowspan={pass.duration}>
             <b>{pass.duration}</b>
           </td>
+          <td rowspan={expiryDate}>
+            <b>{expiryDate}</b>
+          </td>
           <td rowspan={pass.status}>
             <b>{pass.status}</b>
           </td>
@@ -282,10 +320,10 @@ function UserPass(props){
             <b>{pass.remark}</b>
           </td>
           }
-          {pass.status==="Rejected by college" &&
+          {(pass.status==="Rejected by college" || pass.status==="Pass expired") &&
           <td>
             <button
-              onClick={()=>{reApplyForPass(pass._id)}}
+              onClick={()=>{reApplyForPass(pass._id, pass.status)}}
               className="btn btn-sm btn-dark"
               >
                 Re-Apply
@@ -295,7 +333,15 @@ function UserPass(props){
           </tr>
       </tbody>
   </table>
-  </div>
+  { pass.status==="Pass expired" && 
+  <div class="text-center">
+  <button style={{marginBottom: "20px"}} data-toggle="modal" data-target="#exampleModalCenter" className="btn btn-lg btn-outline-dark">Update Details</button>
+        <br/>
+        <button style={{marginBottom: "20px"}} data-toggle="modal" data-target="#exampleModalCenter2" className="btn btn-lg btn-outline-dark">Re-upload College ID</button>
+        <br />
+            </div>
+      }
+</div>
 
         );
       })

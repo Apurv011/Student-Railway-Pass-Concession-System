@@ -1,5 +1,7 @@
 const mongoose = require('mongoose');
 
+var date = getDate();
+
 const passSchema = mongoose.Schema({
     _id: mongoose.Schema.Types.ObjectId,
     userId: {
@@ -61,8 +63,21 @@ const passSchema = mongoose.Schema({
     remark: {
       type: String,
       default: ""
+    },
+    issueDate: {
+      type: String
     }
 });
 
+function getDate(){
+
+  var today = new Date();
+  var dd = String(today.getDate()).padStart(2, '0');
+  var mm = String(today.getMonth() + 1).padStart(2, '0'); 
+  var yyyy = today.getFullYear();
+  today = yyyy + "-" + mm + "-" + dd;
+  return today;
+
+}
 
 module.exports = mongoose.model('Pass', passSchema);

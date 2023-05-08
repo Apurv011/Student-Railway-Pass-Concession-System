@@ -70,8 +70,14 @@ function PersonalVerification(props){
   }
 
   function verify(id){
+    
+    var today = new Date();
+    var dd = String(today.getDate()).padStart(2, '0');
+    var mm = String(today.getMonth() + 1).padStart(2, '0'); 
+    var yyyy = today.getFullYear();
+    today = yyyy + "-" + mm + "-" + dd;
 
-    var change = {"status": "Verified by college"};
+    var change = {"status": "Verified by college", "issuDate": today};
 
     axios.patch(`http://localhost:5000/pass/${id}`, change).then(response => {
         console.log(response.data);
@@ -280,6 +286,7 @@ function PersonalVerification(props){
               <th style={{color:"#ffffff"}}>Destination</th>
               <th style={{color:"#ffffff"}}>Class</th>
               <th style={{color:"#ffffff"}}>Duration</th>
+              <th style={{color:"#ffffff"}}>Status</th>
               <th style={{color:"#ffffff"}}>Download College ID</th>
               <th style={{color:"#ffffff"}}>Verify</th>
               <th style={{color:"#ffffff"}}>Reject</th>
@@ -319,6 +326,9 @@ function PersonalVerification(props){
             </td>
             <td rowspan={pass.duration}>
               <b>{pass.duration}</b>
+            </td>
+            <td rowspan={pass.status}>
+              <b>{pass.status}</b>
             </td>
             <td>
               <button
@@ -370,6 +380,7 @@ function PersonalVerification(props){
         <th style={{color:"#ffffff"}}>Source</th>
         <th style={{color:"#ffffff"}}>Destination</th>
         <th style={{color:"#ffffff"}}>Class</th>
+        <th style={{color:"#ffffff"}}>Expiry Date</th>
         <th style={{color:"#ffffff"}}>Duration</th>
         <th style={{color:"#ffffff"}}>Download College ID</th>
         <th style={{color:"#ffffff"}}>Print</th>

@@ -21,6 +21,19 @@ function VerifiedPassList(props){
     );
   };
 
+  console.log("ABCD");
+  console.log(props.pass);
+  var expiryDate = new Date(props.pass.issueDate);
+  
+  if(props.pass.duration === "3 Months") expiryDate.setDate(expiryDate.getDate() + 90);
+  else if(props.pass.duration === "1 Month") expiryDate.setDate(expiryDate.getDate() + 30);
+    
+  var dd = String(expiryDate.getDate()).padStart(2, '0');
+  var mm = String(expiryDate.getMonth() + 1).padStart(2, '0'); 
+  var yyyy = expiryDate.getFullYear();
+  
+  expiryDate = dd + "-" + mm + "-" + yyyy;
+
   return (
     <tbody>
       <tr className="table-info">
@@ -50,6 +63,9 @@ function VerifiedPassList(props){
         </td>
         <td rowspan={props.pass.class}>
           <b>{props.pass.class}</b>
+        </td>
+        <td rowspan={expiryDate}>
+          <b>{expiryDate}</b>
         </td>
         <td rowspan={props.pass.duration}>
           <b>{props.pass.duration}</b>
